@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Results</title>
+    <link rel="stylesheet" href="../static/css/results.css">
+
+</head>
+<body>
+    <section id="result-section">
+        <div id="image-result">
+            {% if img_path %}
+            <h1>Hasil Klasifikasi Bangunan</h1>
+            <h3>Berikut adalah hasil dari foto yang Anda unggah</h3>
+            <img src="{{ img_path }}" alt="Processed Image" style="display: block;">
+            {% endif %}
+        </div>
+    
+        <div id="text-result">
+            {% if result %}
+            <p>Bangunan Anda Teridentifikasi Sebagai:<br> 
+                <span id="result-label">{{ result }}</span> dengan <span id="result-number">{{
+                    confidence | round(2) }}% tingkat kepercayaan</span></p>
+        </div>
+                
+            <div id="reset-link">
+                <a href="/" >Ulang untuk gambar lain</a>
+            </div>
+            {% endif %}
+    </section>
+    
+</body>
+</html>
+
