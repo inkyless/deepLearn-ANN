@@ -35,13 +35,25 @@ def allowed_file(filename):
 
 def prepare_image(image_path):
     # Define the target image size
-    IMG_SIZE = (256, 256)
+    IMG_SIZE = (128, 128)
     img = cv2.imread(image_path)
-    img = cv2.resize(img, IMG_SIZE)  # Ubah ukuran gambar menjadi 150x150
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    img = img / 255.0  # Normalisasi ke rentang [0,1]
-    img = np.expand_dims(img, axis=0)  # Tambahkan dimensi batch
-    return img
+    img = cv2.resize(img, IMG_SIZE) 
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    #Apply Gaussian Blur
+    blurred = cv2.GaussianBlur(gray, ksize=(3, 3), sigmaX=1) 
+
+    #Apply Canny Edge 
+    v = np.median(blurred)
+    sigma = 0.33
+    lower = int(max(50, (1.0 - sigma) * v))
+    upper = int(min(255, (1.0 + sigma) * v))
+    aperture_size = 3
+    img_edge = cv2.Canny(blurred,lower,upper,apertureSize=aperture_size,L2gradient=True)
+
+    img_edge = img_edge / 255.0  # Normalisasi ke rentang [0,1]
+    img_edge = np.stack((img_edge,) * 3, axis=-1)
+    img_edge = np.expand_dims(img_edge, axis=0)  # Tambahkan dimensi batch
+    return img_edge
 
 
 @app.route("/", methods=["GET"])
