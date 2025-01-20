@@ -9,6 +9,12 @@ from flask import Flask, flash, request, redirect, render_template
 from PIL import Image
 from pillow_heif import register_heif_opener
 
+import streamlit as st
+
+x = st.slider('Select a value')
+st.write(x, 'squared is', x * x)
+
+
 
 app = Flask(__name__)
 upload_folder = "static/uploads"
